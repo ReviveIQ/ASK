@@ -45,6 +45,7 @@
     padding:20px 0; border-bottom:1px solid var(--border); margin-bottom:8px;
   }
   .brand{display:flex; align-items:center; gap:10px; font-family:var(--serif); font-weight:700; font-size:20px; color:var(--teal-dark);}
+  .brand:hover{opacity:0.75;}
   .brand i{font-size:22px; color:var(--gold);}
   nav.crumbs{font-size:14px; color:var(--ink-soft); padding:16px 0;}
   nav.crumbs a{cursor:pointer; text-decoration:none;}
@@ -189,6 +190,30 @@
     background:var(--teal); color:#fff; display:flex; align-items:center; justify-content:center;
     cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,0.18); font-size:22px; z-index:20;
   }
+  .read-aloud-bar{
+    position:fixed; bottom:20px; left:24px; z-index:25;
+    display:flex; align-items:center; gap:8px; background:var(--surface);
+    border:1px solid var(--border); border-radius:999px; padding:8px 10px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.12);
+  }
+  .read-aloud-btn{
+    display:flex; align-items:center; gap:8px; background:var(--gold); color:#fff; border:none;
+    border-radius:999px; padding:10px 18px; font-family:var(--sans); font-size:14px; font-weight:500;
+    cursor:pointer;
+  }
+  .read-aloud-btn:hover{background:#A0721F;}
+  .read-aloud-btn.active{background:var(--teal-dark);}
+  .read-aloud-controls{display:none; align-items:center; gap:6px;}
+  .read-aloud-controls.show{display:flex;}
+  .read-aloud-controls button{
+    background:var(--surface-tint); border:none; border-radius:50%; width:34px; height:34px;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--teal-dark); font-size:15px;
+  }
+  .read-aloud-controls button:hover{background:var(--teal-tint);}
+  .read-aloud-controls select{
+    border:1px solid var(--border); border-radius:8px; padding:6px 8px; font-family:var(--sans);
+    font-size:12.5px; background:var(--surface); color:var(--ink); cursor:pointer;
+  }
   .chat-panel{
     position:fixed; bottom:90px; right:24px; width:380px; max-width:calc(100vw - 32px);
     background:var(--surface); border:1px solid var(--border); border-radius:16px;
@@ -216,6 +241,16 @@
   .banner{background:#FBF6EA; border:1px solid var(--gold-tint); border-left:3px solid var(--gold); border-radius:8px; padding:10px 14px; font-size:12.5px; color:#6B5423; margin-bottom:24px;}
 
   footer.hub-footer{border-top:1px solid var(--border); padding:24px 0; margin-top:56px; font-size:12.5px; color:var(--ink-soft); text-align:center;}
+  .footer-links{margin-bottom:10px;}
+  .footer-links a{color:var(--teal-dark); cursor:pointer; text-decoration:none; font-size:13px;}
+  .footer-links a:hover{text-decoration:underline;}
+  .footer-sep{margin:0 10px; color:var(--border);}
+  .footer-disclaimer{margin:0;}
+  .legal-page h1{font-family:var(--serif); font-size:26px; color:var(--teal-dark); margin:0 0 6px;}
+  .legal-page .legal-updated{font-size:13px; color:var(--ink-soft); margin:0 0 24px;}
+  .legal-page h2{font-family:var(--serif); font-size:18px; color:var(--teal-dark); margin:24px 0 8px;}
+  .legal-page p{font-size:14.5px; line-height:1.7; color:var(--ink); margin:0 0 12px;}
+  .legal-page .placeholder-note{background:var(--gold-tint); border-left:3px solid var(--gold); border-radius:8px; padding:12px 16px; font-size:13px; color:#5C4315; margin-bottom:24px;}
 
   @media (max-width:720px){
     .pathways{grid-template-columns:1fr;}
@@ -231,7 +266,7 @@
 <div class="app">
 
   <header class="topbar">
-    <div class="brand"><i class="ti ti-compass"></i> ASK Resource Hub</div>
+    <div class="brand" onclick="goto('home')" role="button" tabindex="0" style="cursor:pointer;" aria-label="ASK Resource Hub, go to home page"><i class="ti ti-compass" aria-hidden="true"></i> ASK Resource Hub</div>
     <div style="font-size:13px; color:var(--ink-soft);">An initiative of the Florida Developmental Disabilities Council</div>
   </header>
 
@@ -922,9 +957,104 @@
     </div>
   </div>
 
+  <div id="view-terms" style="display:none;">
+    <div class="legal-page">
+      <h1>Terms of Use</h1>
+      <p class="legal-updated">Last updated: [INSERT DATE]</p>
+      <div class="placeholder-note"><i class="ti ti-info-circle" aria-hidden="true" style="margin-right:6px;"></i>This page is a structural placeholder for legal review. Content must be drafted or approved by FDDC counsel before production launch.</div>
+      <h2>Purpose of this site</h2>
+      <p>[INSERT: Statement that the ASK Resource Hub provides general information and resource navigation for families and individuals with I/DD, and does not constitute legal, medical, financial, or clinical advice.]</p>
+      <h2>No professional relationship</h2>
+      <p>[INSERT: Clarify that use of the site, including the AI assistant, does not create an attorney-client, medical provider-patient, or financial advisory relationship.]</p>
+      <h2>Acceptable use</h2>
+      <p>[INSERT: Standard acceptable-use terms \u2014 prohibitions on misuse, scraping, unauthorized commercial use, etc.]</p>
+      <h2>Third-party links</h2>
+      <p>[INSERT: Disclaimer regarding links to external state/national resources referenced throughout content modules, consistent with FDDC's Q&amp;A response limiting AI-sourced external links to pre-approved domains.]</p>
+      <h2>Changes to these terms</h2>
+      <p>[INSERT: Standard right-to-modify clause and notice process.]</p>
+      <h2>Contact</h2>
+      <p>[INSERT: FDDC or designated contact for questions about these terms.]</p>
+    </div>
+  </div>
+
+  <div id="view-privacy" style="display:none;">
+    <div class="legal-page">
+      <h1>Privacy Policy</h1>
+      <p class="legal-updated">Last updated: [INSERT DATE]</p>
+      <div class="placeholder-note"><i class="ti ti-info-circle" aria-hidden="true" style="margin-right:6px;"></i>This page is a structural placeholder for legal review. Content must be drafted or approved by FDDC counsel before production launch.</div>
+      <h2>Information we collect</h2>
+      <p>[INSERT: Describe what is collected \u2014 e.g., search queries, AI chat interactions, aggregate usage analytics \u2014 and what is explicitly NOT collected or required (e.g., no account creation, no PII required to use the site).]</p>
+      <h2>How AI chat data is handled</h2>
+      <p>Consistent with FDDC's official Q&amp;A responses for this IFP: chat transcripts are retained for quality and compliance review only, not for routine public use; analytics are reported in aggregate to protect sensitive user information; and no user data, prompts, search queries, chat interactions, analytics, or resource data are stored, processed, or transmitted outside the United States, except as required by law.</p>
+      <h2>Third-party AI services</h2>
+      <p>[INSERT: Disclosure of whether data is transmitted to or retained by third-party AI providers, and whether it may be used for model training, per FDDC Q&amp;A requirements.]</p>
+      <h2>Your choices</h2>
+      <p>[INSERT: Any opt-out, data deletion, or contact process available to users.]</p>
+      <h2>Contact</h2>
+      <p>[INSERT: FDDC or designated privacy contact.]</p>
+    </div>
+  </div>
+
+  <div id="view-accessibility-statement" style="display:none;">
+    <div class="legal-page">
+      <h1>Accessibility Statement</h1>
+      <p class="legal-updated">Last updated: [INSERT DATE]</p>
+      <div class="placeholder-note"><i class="ti ti-info-circle" aria-hidden="true" style="margin-right:6px;"></i>This page reflects the prototype's current, honest accessibility status \u2014 not a certified conformance claim. A formal VPAT and third-party audit are planned per the Work Plan before production launch.</div>
+      <h2>Our commitment</h2>
+      <p>The ASK Resource Hub is being built to conform to Section 508 of the Rehabilitation Act and WCAG 2.1/2.2 Level AA. Accessibility is treated as a core requirement, not an add-on, given that families of individuals with I/DD \u2014 including individuals with I/DD themselves \u2014 are the platform's primary and secondary audiences.</p>
+      <h2>Current status of this prototype</h2>
+      <p>This interactive prototype includes keyboard operability for all interactive elements, screen reader landmarks and live regions, visible focus indicators, and labeled controls for voice control software. It has not yet undergone a formal third-party WCAG/508 audit or testing with users of assistive technology \u2014 that testing is scheduled in the Work Plan (Months 7\u20138) ahead of the required completion date.</p>
+      <h2>Known limitations</h2>
+      <p>[INSERT: Any known gaps identified during internal review, to be updated as testing progresses.]</p>
+      <h2>Feedback</h2>
+      <p>[INSERT: Contact method for users to report accessibility barriers they encounter.]</p>
+    </div>
+  </div>
+
+  <div id="view-nondiscrimination" style="display:none;">
+    <div class="legal-page">
+      <h1>Non-Discrimination Notice</h1>
+      <p class="legal-updated">Last updated: [INSERT DATE]</p>
+      <div class="placeholder-note"><i class="ti ti-info-circle" aria-hidden="true" style="margin-right:6px;"></i>This page is a structural placeholder for legal review, consistent with the non-discrimination requirements referenced in IFP 2026-AS-9400's Mandatory Terms and Conditions.</div>
+      <h2>Our policy</h2>
+      <p>[INSERT: Standard non-discrimination statement \u2014 no discrimination on the basis of race, religion, color, sexual orientation, national origin, disability, or other protected class in access to this platform's content and features.]</p>
+      <h2>Accessibility and language access</h2>
+      <p>[INSERT: Statement on accommodations available for users who need alternative formats or communication support. Note: per FDDC's official IFP Q&amp;A, multilingual support and translation are not required for this platform's initial scope.]</p>
+      <h2>How to file a concern</h2>
+      <p>[INSERT: Contact process for reporting a non-discrimination concern related to the platform.]</p>
+    </div>
+  </div>
+
   </main>
 
-  <footer class="hub-footer">Not for distribution — internal prototype for IFP 2026-AS-9400 proposal purposes only.</footer>
+  <footer class="hub-footer">
+    <div class="footer-links">
+      <a onclick="goto('terms')" role="button" tabindex="0">Terms of Use</a>
+      <span class="footer-sep">·</span>
+      <a onclick="goto('privacy')" role="button" tabindex="0">Privacy Policy</a>
+      <span class="footer-sep">·</span>
+      <a onclick="goto('accessibility-statement')" role="button" tabindex="0">Accessibility Statement</a>
+      <span class="footer-sep">·</span>
+      <a onclick="goto('nondiscrimination')" role="button" tabindex="0">Non-Discrimination Notice</a>
+    </div>
+    <p class="footer-disclaimer">Not for distribution — internal prototype for IFP 2026-AS-9400 proposal purposes only.</p>
+  </footer>
+</div>
+
+<div class="read-aloud-bar">
+  <button class="read-aloud-btn" id="read-aloud-toggle" onclick="toggleReadAloud()" aria-pressed="false">
+    <i class="ti ti-volume" id="read-aloud-icon" aria-hidden="true"></i>
+    <span id="read-aloud-label">Read this page aloud</span>
+  </button>
+  <div class="read-aloud-controls" id="read-aloud-controls">
+    <button onclick="pauseResumeReadAloud()" id="read-aloud-pause-btn" aria-label="Pause reading"><i class="ti ti-player-pause" aria-hidden="true"></i></button>
+    <button onclick="stopReadAloud()" aria-label="Stop reading"><i class="ti ti-player-stop" aria-hidden="true"></i></button>
+    <select id="read-aloud-rate" onchange="changeReadAloudRate()" aria-label="Reading speed">
+      <option value="0.75">Slow</option>
+      <option value="1" selected>Normal</option>
+      <option value="1.25">Fast</option>
+    </select>
+  </div>
 </div>
 
 <div class="chat-fab" onclick="toggleChat()" aria-label="Open ASK assistant" role="button" tabindex="0"><i class="ti ti-message-circle-2" aria-hidden="true"></i></div>
@@ -1318,9 +1448,13 @@ const crumbMap = {
   health:[['ASK Resource Hub','home'],['Health Insurance','health']],
   'health-explainer':[['ASK Resource Hub','home'],['Health Insurance','health'],['Medicaid Managed Care plans','health-explainer']],
   'health-aid':[['ASK Resource Hub','home'],['Health Insurance','health'],['Medicaid vs. Waiver vs. private insurance','health-aid']],
+  terms:[['ASK Resource Hub','home'],['Terms of Use','terms']],
+  privacy:[['ASK Resource Hub','home'],['Privacy Policy','privacy']],
+  'accessibility-statement':[['ASK Resource Hub','home'],['Accessibility Statement','accessibility-statement']],
+  nondiscrimination:[['ASK Resource Hub','home'],['Non-Discrimination Notice','nondiscrimination']],
 };
 
-const ALL_VIEWS = ['home','topic','aid','explainer','lifestage','lifestage-detail','housing','housing-aid','housing-explainer','legal','legal-explainer','services','services-explainer','services-aid','social','social-explainer','social-aid','diagnosis','diagnosis-explainer','diagnosis-aid','education','education-aid','education-explainer','employment','employment-explainer','employment-aid','health','health-explainer','health-aid'];
+const ALL_VIEWS = ['home','topic','aid','explainer','lifestage','lifestage-detail','housing','housing-aid','housing-explainer','legal','legal-explainer','services','services-explainer','services-aid','social','social-explainer','social-aid','diagnosis','diagnosis-explainer','diagnosis-aid','education','education-aid','education-explainer','employment','employment-explainer','employment-aid','health','health-explainer','health-aid','terms','privacy','accessibility-statement','nondiscrimination'];
 
 const searchIndex = [
   { title:'Asset Management', domain:'Topic', type:'Topic', view:'topic', keywords:'asset management money savings benefits ssi medicaid' },
@@ -1407,6 +1541,10 @@ document.addEventListener('click', function(e){
 });
 
 function goto(view){
+  if(typeof speechSupported === 'function' && speechSupported()){
+    window.speechSynthesis.cancel();
+    if(typeof resetReadAloudUI === 'function') resetReadAloudUI();
+  }
   ALL_VIEWS.forEach(v => {
     document.getElementById('view-'+v).style.display = (v===view) ? 'block':'none';
   });
@@ -1441,6 +1579,94 @@ function enhanceInteractiveElements(){
 renderLifeStageDetail();
 goto('home');
 enhanceInteractiveElements();
+
+let readAloudUtterance = null;
+let readAloudRate = 1;
+
+function getCurrentViewElement(){
+  for(const v of ALL_VIEWS){
+    const el = document.getElementById('view-'+v);
+    if(el && el.style.display === 'block') return el;
+  }
+  return null;
+}
+
+function getReadableText(el){
+  if(!el) return '';
+  const clone = el.cloneNode(true);
+  clone.querySelectorAll('[aria-hidden="true"], script, style').forEach(node => node.remove());
+  return clone.innerText.replace(/\s+/g, ' ').trim();
+}
+
+function speechSupported(){
+  return 'speechSynthesis' in window;
+}
+
+function toggleReadAloud(){
+  if(!speechSupported()){
+    alert('Sorry, read-aloud is not supported in this browser. Try Chrome, Edge, or Safari.');
+    return;
+  }
+  if(window.speechSynthesis.speaking || window.speechSynthesis.paused){
+    stopReadAloud();
+    return;
+  }
+  const viewEl = getCurrentViewElement();
+  const text = getReadableText(viewEl);
+  if(!text){
+    alert('There is no readable content on this page yet.');
+    return;
+  }
+  readAloudUtterance = new SpeechSynthesisUtterance(text);
+  readAloudUtterance.rate = readAloudRate;
+  readAloudUtterance.onend = resetReadAloudUI;
+  readAloudUtterance.onerror = resetReadAloudUI;
+  window.speechSynthesis.speak(readAloudUtterance);
+
+  document.getElementById('read-aloud-toggle').classList.add('active');
+  document.getElementById('read-aloud-toggle').setAttribute('aria-pressed', 'true');
+  document.getElementById('read-aloud-icon').className = 'ti ti-volume-2';
+  document.getElementById('read-aloud-label').textContent = 'Reading\u2026';
+  document.getElementById('read-aloud-controls').classList.add('show');
+  document.getElementById('read-aloud-pause-btn').innerHTML = '<i class="ti ti-player-pause" aria-hidden="true"></i>';
+  document.getElementById('read-aloud-pause-btn').setAttribute('aria-label', 'Pause reading');
+}
+
+function pauseResumeReadAloud(){
+  if(!speechSupported()) return;
+  if(window.speechSynthesis.speaking && !window.speechSynthesis.paused){
+    window.speechSynthesis.pause();
+    document.getElementById('read-aloud-pause-btn').innerHTML = '<i class="ti ti-player-play" aria-hidden="true"></i>';
+    document.getElementById('read-aloud-pause-btn').setAttribute('aria-label', 'Resume reading');
+  } else if(window.speechSynthesis.paused){
+    window.speechSynthesis.resume();
+    document.getElementById('read-aloud-pause-btn').innerHTML = '<i class="ti ti-player-pause" aria-hidden="true"></i>';
+    document.getElementById('read-aloud-pause-btn').setAttribute('aria-label', 'Pause reading');
+  }
+}
+
+function stopReadAloud(){
+  if(speechSupported()) window.speechSynthesis.cancel();
+  resetReadAloudUI();
+}
+
+function resetReadAloudUI(){
+  const toggle = document.getElementById('read-aloud-toggle');
+  if(!toggle) return;
+  toggle.classList.remove('active');
+  toggle.setAttribute('aria-pressed', 'false');
+  document.getElementById('read-aloud-icon').className = 'ti ti-volume';
+  document.getElementById('read-aloud-label').textContent = 'Read this page aloud';
+  document.getElementById('read-aloud-controls').classList.remove('show');
+}
+
+function changeReadAloudRate(){
+  readAloudRate = parseFloat(document.getElementById('read-aloud-rate').value);
+  if(speechSupported() && window.speechSynthesis.speaking){
+    stopReadAloud();
+    toggleReadAloud();
+  }
+}
 
 function toggleChat(){
   document.getElementById('chat-panel').classList.toggle('open');
