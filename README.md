@@ -8,8 +8,9 @@ Platform build.
 
 ```
 ASK/
-├── prototype/
+├── docs/
 │   └── index.html          # Interactive front-end prototype (Work Sample 1)
+│                            # served live via GitHub Pages
 ├── proposal-documents/
 │   ├── IFP-2026-AS-9400-Proposal-Narrative-DRAFT.docx
 │   ├── IFP-2026-AS-9400-Work-Plan-COMPLETED.docx
@@ -18,12 +19,18 @@ ASK/
 │   ├── IFP-2026-AS-9400-Scoring-Rubric-UPDATED.docx   # internal progress tracker
 │   ├── templates/          # blank templates as issued by FDDC
 │   └── source-ifp/         # original IFP + official Q&A, for reference
-└── README.md
+├── README.md
+└── CHANGELOG.md
 ```
+
+> Note: `reorganize.sh` was a one-time script used to move files into this
+> structure after the initial commit. Safe to delete (`git rm reorganize.sh`)
+> once you've confirmed the structure above matches the live repo.
 
 ## Prototype
 
-Open `prototype/index.html` directly in any browser — no build step, no
+Live at **https://reviveiq.github.io/ASK/** (served via GitHub Pages from
+`/docs`), or open `docs/index.html` directly in any browser — no build step, no
 dependencies, no server required.
 
 **What it demonstrates:**

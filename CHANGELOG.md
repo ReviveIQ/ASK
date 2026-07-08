@@ -4,6 +4,11 @@ All notable changes to the ASK prototype and proposal documents.
 
 ## Unreleased
 
+### Infrastructure
+- Renamed `prototype/` to `docs/` and enabled GitHub Pages (Branch: main,
+  Folder: /docs) — prototype now has a live URL at
+  https://reviveiq.github.io/ASK/
+
 ### Proposal documents
 - Filled Work Plan Template with month-by-month plan covering all 4 Scope of
   Work items
