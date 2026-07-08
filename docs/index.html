@@ -25,6 +25,15 @@
     --sans: 'Inter', sans-serif;
   }
   *{box-sizing:border-box;}
+  .skip-link{
+    position:absolute; top:-100px; left:8px; z-index:100;
+    background:var(--teal-dark); color:#fff; padding:10px 18px; border-radius:8px;
+    font-family:var(--sans); font-size:14px; text-decoration:none; transition:top .15s;
+  }
+  .skip-link:focus{top:8px;}
+  [role="button"]:focus-visible, a:focus-visible, button:focus-visible, input:focus-visible{
+    outline:3px solid var(--teal); outline-offset:2px;
+  }
   body{
     margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
     -webkit-font-smoothing:antialiased;
@@ -218,6 +227,7 @@
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 <div class="app">
 
   <header class="topbar">
@@ -227,14 +237,16 @@
 
   <div class="site-search-wrap">
     <div class="site-search-bar">
-      <i class="ti ti-search"></i>
+      <i class="ti ti-search" aria-hidden="true"></i>
       <input id="site-search-input" type="text" placeholder="Search all topics, guides, and resources..." autocomplete="off" oninput="handleSiteSearch()" onkeydown="if(event.key==='Enter')handleSiteSearchEnter()" onfocus="handleSiteSearch()" />
-      <i class="ti ti-x" id="site-search-clear" style="display:none; cursor:pointer;" onclick="clearSiteSearch()"></i>
+      <i class="ti ti-x" id="site-search-clear" style="display:none; cursor:pointer;" onclick="clearSiteSearch()" role="button" tabindex="0" aria-label="Clear search"></i>
     </div>
-    <div class="site-search-results" id="site-search-results"></div>
+    <div class="site-search-results" id="site-search-results" role="region" aria-live="polite" aria-label="Search results"></div>
   </div>
 
   <nav class="crumbs" id="crumbs"></nav>
+
+  <main id="main-content">
 
   <div id="view-home">
     <section class="hero">
@@ -242,7 +254,7 @@
       <p class="sub">Ask a real question in your own words, or browse resources by topic, life stage, or family story.</p>
       <div class="ask-bar">
         <input id="ask-input" type="text" placeholder="How do I protect my child's SSI benefits?" />
-        <button onclick="handleHeroAsk()" aria-label="Ask"><i class="ti ti-arrow-right"></i></button>
+        <button onclick="handleHeroAsk()" aria-label="Ask"><i class="ti ti-arrow-right" aria-hidden="true"></i></button>
       </div>
       <div class="ask-hint">Try: <span onclick="quickAsk('What is a special needs trust?')">what is a special needs trust?</span> · <span onclick="quickAsk('How do ABLE accounts work?')">how do ABLE accounts work?</span></div>
     </section>
@@ -910,16 +922,18 @@
     </div>
   </div>
 
+  </main>
+
   <footer class="hub-footer">Not for distribution — internal prototype for IFP 2026-AS-9400 proposal purposes only.</footer>
 </div>
 
-<div class="chat-fab" onclick="toggleChat()" aria-label="Open ASK assistant"><i class="ti ti-message-circle-2"></i></div>
+<div class="chat-fab" onclick="toggleChat()" aria-label="Open ASK assistant" role="button" tabindex="0"><i class="ti ti-message-circle-2" aria-hidden="true"></i></div>
 <div class="chat-panel" id="chat-panel">
   <div class="chat-head">
     <div><h4>ASK assistant</h4><small>Answers only from approved ASK content, with sources</small></div>
-    <i class="ti ti-x close" onclick="toggleChat()"></i>
+    <i class="ti ti-x close" onclick="toggleChat()" role="button" tabindex="0" aria-label="Close chat"></i>
   </div>
-  <div class="chat-body" id="chat-body">
+  <div class="chat-body" id="chat-body" role="log" aria-live="polite" aria-label="Conversation with ASK assistant">
     <div class="msg bot">Hi, I'm here to help you find information from the ASK Resource Hub. What would you like to know?</div>
   </div>
   <div class="chat-suggest">
@@ -929,7 +943,7 @@
   </div>
   <div class="chat-input-row">
     <input id="chat-input" type="text" placeholder="Ask a question..." onkeydown="if(event.key==='Enter')sendChat()" />
-    <button onclick="sendChat()" aria-label="Send"><i class="ti ti-send" style="font-size:15px;"></i></button>
+    <button onclick="sendChat()" aria-label="Send"><i class="ti ti-send" style="font-size:15px;" aria-hidden="true"></i></button>
   </div>
 </div>
 
@@ -1024,16 +1038,17 @@ function renderLifeStageDetail(){
 
   const modGroup = document.getElementById('ls-detail-modules');
   modGroup.innerHTML = s.modules.map(m =>
-    `<div class="module-row" onclick="goto('${m.view}')"><span>${m.label} <span style="color:var(--ink-soft); font-size:12.5px;">(${m.domain})</span></span><i class="ti ti-chevron-right"></i></div>`
+    `<div class="module-row" onclick="goto('${m.view}')" aria-label="${m.label}, ${m.domain}"><span>${m.label} <span style="color:var(--ink-soft); font-size:12.5px;">(${m.domain})</span></span><i class="ti ti-chevron-right" aria-hidden="true"></i></div>`
   ).join('');
 
   const storyGroup = document.getElementById('ls-detail-story');
   storyGroup.innerHTML = `
-    <div class="story-card" onclick="goto('${s.story.view}')">
-      <div class="avatar-row"><div class="dot">${s.story.initials}</div></div>
+    <div class="story-card" onclick="goto('${s.story.view}')" aria-label="Family story: ${s.story.name}">
+      <div class="avatar-row"><div class="dot" aria-hidden="true">${s.story.initials}</div></div>
       <h4>${s.story.name}</h4>
       <p>${s.story.text}</p>
     </div>`;
+  enhanceInteractiveElements();
 }
 
 function renderLifeStages(){
@@ -1068,11 +1083,11 @@ function renderAccordion(){
   const list = document.getElementById('accordion-list');
   list.innerHTML = accordionData.map((item,i) => `
     <div class="accordion-item" id="acc-${i}">
-      <div class="accordion-head" onclick="toggleAcc(${i})">
+      <div class="accordion-head" onclick="toggleAcc(${i})" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-body-${i}">
         <div><h4>${item.title}</h4><p>${item.sub}</p></div>
         <i class="ti ti-chevron-down"></i>
       </div>
-      <div class="accordion-body">
+      <div class="accordion-body" id="acc-body-${i}">
         <div class="accordion-body-inner">
           <div class="col"><h5>How it works</h5><ul>${item.how.map(h=>`<li>${h}</li>`).join('')}</ul></div>
           <div class="col"><h5>Things to watch out for</h5><ul>${item.watch.map(w=>`<li>${w}</li>`).join('')}</ul></div>
@@ -1082,8 +1097,14 @@ function renderAccordion(){
 }
 renderAccordion();
 
+function toggleAccordionItem(itemEl){
+  const isOpen = itemEl.classList.toggle('open');
+  const head = itemEl.querySelector('.accordion-head');
+  if(head) head.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+
 function toggleAcc(i){
-  document.getElementById('acc-'+i).classList.toggle('open');
+  toggleAccordionItem(document.getElementById('acc-'+i));
 }
 
 const housingAccordionData = [
@@ -1105,11 +1126,11 @@ function renderHousingAccordion(){
   const list = document.getElementById('housing-accordion-list');
   list.innerHTML = housingAccordionData.map((item,i) => `
     <div class="accordion-item" id="h-acc-${i}">
-      <div class="accordion-head" onclick="toggleHAcc(${i})">
+      <div class="accordion-head" onclick="toggleHAcc(${i})" role="button" tabindex="0" aria-expanded="false" aria-controls="h-acc-body-${i}">
         <div><h4>${item.title}</h4><p>${item.sub}</p></div>
         <i class="ti ti-chevron-down"></i>
       </div>
-      <div class="accordion-body">
+      <div class="accordion-body" id="h-acc-body-${i}">
         <div class="accordion-body-inner">
           <div class="col"><h5>How it works</h5><ul>${item.how.map(h=>`<li>${h}</li>`).join('')}</ul></div>
           <div class="col"><h5>Things to watch out for</h5><ul>${item.watch.map(w=>`<li>${w}</li>`).join('')}</ul></div>
@@ -1120,7 +1141,7 @@ function renderHousingAccordion(){
 renderHousingAccordion();
 
 function toggleHAcc(i){
-  document.getElementById('h-acc-'+i).classList.toggle('open');
+  toggleAccordionItem(document.getElementById('h-acc-'+i));
 }
 
 const servicesAccordionData = [
@@ -1140,11 +1161,11 @@ function renderServicesAccordion(){
   if(!list) return;
   list.innerHTML = servicesAccordionData.map((item,i) => `
     <div class="accordion-item" id="s-acc-${i}">
-      <div class="accordion-head" onclick="toggleSAcc(${i})">
+      <div class="accordion-head" onclick="toggleSAcc(${i})" role="button" tabindex="0" aria-expanded="false" aria-controls="s-acc-body-${i}">
         <div><h4>${item.title}</h4><p>${item.sub}</p></div>
         <i class="ti ti-chevron-down"></i>
       </div>
-      <div class="accordion-body">
+      <div class="accordion-body" id="s-acc-body-${i}">
         <div class="accordion-body-inner">
           <div class="col"><h5>How it works</h5><ul>${item.how.map(h=>`<li>${h}</li>`).join('')}</ul></div>
           <div class="col"><h5>Things to watch out for</h5><ul>${item.watch.map(w=>`<li>${w}</li>`).join('')}</ul></div>
@@ -1155,7 +1176,7 @@ function renderServicesAccordion(){
 renderServicesAccordion();
 
 function toggleSAcc(i){
-  document.getElementById('s-acc-'+i).classList.toggle('open');
+  toggleAccordionItem(document.getElementById('s-acc-'+i));
 }
 
 const socialAccordionData = [
@@ -1178,11 +1199,11 @@ function renderSocialAccordion(){
   if(!list) return;
   list.innerHTML = socialAccordionData.map((item,i) => `
     <div class="accordion-item" id="so-acc-${i}">
-      <div class="accordion-head" onclick="toggleSoAcc(${i})">
+      <div class="accordion-head" onclick="toggleSoAcc(${i})" role="button" tabindex="0" aria-expanded="false" aria-controls="so-acc-body-${i}">
         <div><h4>${item.title}</h4><p>${item.sub}</p></div>
         <i class="ti ti-chevron-down"></i>
       </div>
-      <div class="accordion-body">
+      <div class="accordion-body" id="so-acc-body-${i}">
         <div class="accordion-body-inner">
           <div class="col"><h5>How it works</h5><ul>${item.how.map(h=>`<li>${h}</li>`).join('')}</ul></div>
           <div class="col"><h5>Things to watch out for</h5><ul>${item.watch.map(w=>`<li>${w}</li>`).join('')}</ul></div>
@@ -1193,7 +1214,7 @@ function renderSocialAccordion(){
 renderSocialAccordion();
 
 function toggleSoAcc(i){
-  document.getElementById('so-acc-'+i).classList.toggle('open');
+  toggleAccordionItem(document.getElementById('so-acc-'+i));
 }
 
 function makeAccordionRenderer(listId, data, prefix){
@@ -1201,11 +1222,11 @@ function makeAccordionRenderer(listId, data, prefix){
   if(!list) return;
   list.innerHTML = data.map((item,i) => `
     <div class="accordion-item" id="${prefix}-acc-${i}">
-      <div class="accordion-head" onclick="toggleGenericAcc('${prefix}', ${i})">
+      <div class="accordion-head" onclick="toggleGenericAcc('${prefix}', ${i})" role="button" tabindex="0" aria-expanded="false" aria-controls="${prefix}-acc-body-${i}">
         <div><h4>${item.title}</h4><p>${item.sub}</p></div>
         <i class="ti ti-chevron-down"></i>
       </div>
-      <div class="accordion-body">
+      <div class="accordion-body" id="${prefix}-acc-body-${i}">
         <div class="accordion-body-inner">
           <div class="col"><h5>How it works</h5><ul>${item.how.map(h=>`<li>${h}</li>`).join('')}</ul></div>
           <div class="col"><h5>Things to watch out for</h5><ul>${item.watch.map(w=>`<li>${w}</li>`).join('')}</ul></div>
@@ -1214,7 +1235,7 @@ function makeAccordionRenderer(listId, data, prefix){
     </div>`).join('');
 }
 function toggleGenericAcc(prefix, i){
-  document.getElementById(prefix+'-acc-'+i).classList.toggle('open');
+  toggleAccordionItem(document.getElementById(prefix+'-acc-'+i));
 }
 
 const diagnosisAccordionData = [
@@ -1354,6 +1375,7 @@ function handleSiteSearch(){
       </div>`).join('');
   }
   results.classList.add('open');
+  enhanceInteractiveElements();
 }
 
 function selectSearchResult(view){
@@ -1398,8 +1420,27 @@ function goto(view){
   ).join('');
   window.scrollTo({top:0, behavior:'smooth'});
 }
+function enhanceInteractiveElements(){
+  document.querySelectorAll('[onclick]').forEach(el => {
+    const tag = el.tagName.toLowerCase();
+    if(tag === 'button' || tag === 'a' || tag === 'input' || tag === 'select' || tag === 'textarea') return;
+    if(!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    if(!el.hasAttribute('role')) el.setAttribute('role', 'button');
+    if(!el.dataset.kbEnhanced){
+      el.dataset.kbEnhanced = '1';
+      el.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
+          e.preventDefault();
+          el.click();
+        }
+      });
+    }
+  });
+}
+
 renderLifeStageDetail();
 goto('home');
+enhanceInteractiveElements();
 
 function toggleChat(){
   document.getElementById('chat-panel').classList.toggle('open');
